@@ -1,5 +1,7 @@
 import { css } from "@emotion/css"
 import { useGameProvider } from "./GameProvider"
+import { Stage } from "@pixi/react"
+import RoomSprite from "./RoomSprite"
 
 const Viewport = () => {
   const { currentRoom, currentAction, handleActionClick } = useGameProvider()
@@ -36,12 +38,10 @@ const Viewport = () => {
     <div
       id="viewport"
       className={css`
-        background: url(./images/${currentRoom?.image}?t=241005);
-        background-size: cover;
         cursor: ${currentCursor};
       `}
     >
-      <table id="actions-grid">
+      {/* <table id="actions-grid">
         <tbody>
           {rows.map((row, rowIndex) => (
             <tr key={rowIndex}>
@@ -56,9 +56,44 @@ const Viewport = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
+
+      <Stage
+        width={495}
+        height={495}
+      >
+        <RoomSprite currentRoom={currentRoom} />
+      </Stage>
     </div>
   )
+
+  // return (
+  //   <div
+  //     id="viewport"
+  //     className={css`
+  //       background: url(./images/${currentRoom?.image}?t=241005);
+  //       background-size: cover;
+  //       cursor: ${currentCursor};
+  //     `}
+  //   >
+  //     <table id="actions-grid">
+  //       <tbody>
+  //         {rows.map((row, rowIndex) => (
+  //           <tr key={rowIndex}>
+  //             {row.map((cell) => (
+  //               <td
+  //                 key={cell}
+  //                 onClick={() => handleActionClick(cell)}
+  //               >
+  //                 {cell}
+  //               </td>
+  //             ))}
+  //           </tr>
+  //         ))}
+  //       </tbody>
+  //     </table>
+  //   </div>
+  // )
 }
 
 export default Viewport
