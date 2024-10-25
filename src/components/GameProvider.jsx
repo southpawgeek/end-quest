@@ -74,6 +74,11 @@ export const GameProvider = ({ children }) => {
     setPlaybackRate(Math.random() * (2 - 1) + 1)
   }
   // viewport
+  const handleInteraction = (actions) => {
+    console.log(actions)
+    console.log(currentAction)
+  }
+
   const handleActionClick = (sector) => {
     const actions = currentRoom.actions
     if (actions?.[sector]?.[currentAction]?.description) {
@@ -119,6 +124,7 @@ export const GameProvider = ({ children }) => {
         handleLeaveAction,
         handleExit,
         handleActionClick,
+        handleInteraction,
       }}
     >
       {children}

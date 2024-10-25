@@ -339,6 +339,16 @@ const rooms = {
     description: [
       "You don't remember how you got here, but you are in a storage room that is not storing very much. A doorway leads out into the foyer, and a hole descends into a very dark area. A dirty chair sits by the door.",
     ],
+    interactables: [
+      {
+        name: "startChair",
+        x: 345,
+        y: 250,
+        width: 55,
+        height: 110,
+        actions: actionSets.startChair,
+      },
+    ],
     actions: {
       // doorway
       c5: actionSets.startDoorway,
