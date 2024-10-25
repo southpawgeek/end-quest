@@ -1,26 +1,11 @@
-import { css } from "@emotion/css"
 import { useGameProvider } from "./GameProvider"
 import { Stage } from "@pixi/react"
 import RoomSprite from "./RoomSprite"
 import Interactable from "./Interactable"
+import DeathRoom from "./DeathRoom"
 
 const Viewport = () => {
   const { currentRoom, currentAction, handleInteraction } = useGameProvider()
-
-  let currentCursor = "default"
-
-  if (currentAction === "examine") {
-    currentCursor = "help"
-  }
-  if (currentAction === "use") {
-    currentCursor = "pointer"
-  }
-  if (currentAction === "take") {
-    currentCursor = "grab"
-  }
-  if (currentAction === "hit") {
-    currentCursor = "grabbing"
-  }
 
   const handlePointerDown = (event) => {
     const x = event.nativeEvent.offsetX
@@ -28,22 +13,18 @@ const Viewport = () => {
     console.log(x, y)
   }
 
-  const interactables = currentRoom?.interactables
-
   return (
     <div
       id="viewport"
-      className={css`
-        cursor: ${currentCursor};
-      `}
+      className={`cursor-${currentAction}`}
     >
       <Stage
         width={495}
         height={495}
         onPointerDown={handlePointerDown}
       >
-        <RoomSprite currentRoom={currentRoom} />
-        {interactables.map((interactable) => (
+        {currentRoom?.isDeath ? <DeathRoom currentRoom={currentRoom}/> : <RoomSprite currentRoom={currentRoom} />}
+        {currentRoom?.interactables?.map((interactable) => (
           <Interactable
             key={interactable.name}
             interactable={interactable}

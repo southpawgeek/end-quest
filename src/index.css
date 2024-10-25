@@ -109,6 +109,26 @@ hr {
   border: 0.25rem solid var(--ui-border);
 }
 
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-examine {
+  cursor: help;
+}
+
+.cursor-use {
+  cursor: pointer;
+}
+
+.cursor-take {
+  cursor: grab;
+}
+
+.cursor-hit {
+  cursor: grabbing;
+}
+
 #sidebar {
   font-size: 1.5rem;
   padding: 0;

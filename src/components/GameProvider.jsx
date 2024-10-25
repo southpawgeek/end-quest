@@ -13,7 +13,7 @@ export const GameProvider = ({ children }) => {
 
   const [currentRoom, setCurrentRoom] = useState(rooms.start)
   const [currentDescription, setCurrentDescription] = useState(
-    rooms.start.description
+    currentRoom.description
   )
 
   const [visitedRooms, setVisitedRooms] = useState(["start"])
@@ -75,19 +75,14 @@ export const GameProvider = ({ children }) => {
   }
   // viewport
   const handleInteraction = (actions) => {
-    console.log(actions)
-    console.log(currentAction)
-  }
-
-  const handleActionClick = (sector) => {
-    const actions = currentRoom.actions
-    if (actions?.[sector]?.[currentAction]?.description) {
-      setCurrentDescription(actions[sector][currentAction].description)
+    if (actions?.[currentAction]?.description) {
+      setCurrentDescription(actions[currentAction].description)
       setCurrentAction("default")
     }
 
-    if (actions?.[sector]?.[currentAction]?.nextRoom) {
-      const nextRoom = rooms[actions[sector][currentAction].nextRoom]
+    if (actions?.[currentAction]?.nextRoom) {
+      const nextRoom = rooms[actions[currentAction].nextRoom]
+
       setCurrentRoom(nextRoom)
       addVisitedRoom(nextRoom.key)
       setCurrentDescription(nextRoom.description)
@@ -103,6 +98,7 @@ export const GameProvider = ({ children }) => {
       }
     }
   }
+
   return (
     <GameContext.Provider
       value={{
@@ -123,7 +119,6 @@ export const GameProvider = ({ children }) => {
         handleCancelAction,
         handleLeaveAction,
         handleExit,
-        handleActionClick,
         handleInteraction,
       }}
     >
