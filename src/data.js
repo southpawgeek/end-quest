@@ -91,6 +91,9 @@ const actionSets = {
         "You try kicking the boards, but they are supernaturally strong and do not budge.",
       ],
     },
+    default: {
+      description: ["You walk straight into the boards, imagining they would somehow let you through. You imagined wrong."]
+    }
   },
   foyerKitchen: {
     examine: { description: ["The kitchen lies beyond this door."] },
