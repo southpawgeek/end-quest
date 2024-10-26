@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useState } from "react"
 import data from "../data"
 import useSound from "use-sound"
 import soundBoop from "../sounds/boop.wav"
