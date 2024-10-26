@@ -6,7 +6,7 @@ import soundExit from "../sounds/exit.wav"
 import soundMove from "../sounds/move.wav"
 import soundDead from "../sounds/dead.wav"
 
-const GameContext = createContext()
+export const GameContext = createContext()
 
 export const GameProvider = ({ children }) => {
   const { actions, rooms, tasks } = data
@@ -126,5 +126,3 @@ export const GameProvider = ({ children }) => {
     </GameContext.Provider>
   )
 }
-
-export const useGameProvider = () => useContext(GameContext)

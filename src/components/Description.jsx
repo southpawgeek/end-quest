@@ -1,5 +1,5 @@
 import { ReactTyped } from "react-typed"
-import { useGameProvider } from "./GameProvider"
+import { useGameProvider } from "../hooks/useGameProvider"
 const Description = () => {
   const { currentRoom, currentDescription } = useGameProvider()
   return (

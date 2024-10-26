@@ -1,4 +1,4 @@
-import { useGameProvider } from "./GameProvider"
+import { useGameProvider } from "../hooks/useGameProvider"
 
 const Actions = () => {
   const {

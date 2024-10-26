@@ -1,4 +1,4 @@
-import { useGameProvider } from "./GameProvider"
+import { useGameProvider } from "../hooks/useGameProvider"
 import { Stage } from "@pixi/react"
 import RoomSprite from "./RoomSprite"
 import Interactable from "./Interactable"
@@ -23,7 +23,11 @@ const Viewport = () => {
         height={495}
         onPointerDown={handlePointerDown}
       >
-        {currentRoom?.isDeath ? <DeathRoom currentRoom={currentRoom}/> : <RoomSprite currentRoom={currentRoom} />}
+        {currentRoom?.isDeath ? (
+          <DeathRoom currentRoom={currentRoom} />
+        ) : (
+          <RoomSprite currentRoom={currentRoom} />
+        )}
         {currentRoom?.interactables?.map((interactable) => (
           <Interactable
             key={interactable.name}
