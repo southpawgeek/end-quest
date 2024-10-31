@@ -7,13 +7,13 @@ const DeathRoom = ({ currentRoom }) => {
   const [rotation, setRotation] = useState(0)
 
   useTick((dt) => {
-      i += 0.05 * dt
+    i += 0.05 * dt
     if (roomAlpha < 1) {
       const newAlpha = roomAlpha + i
       setRoomAlpha(newAlpha)
     }
-      const newRotation = rotation + i / 2
-      setRotation(newRotation)
+    const newRotation = rotation + i / 2
+    setRotation(newRotation)
   })
 
   useEffect(
@@ -26,18 +26,24 @@ const DeathRoom = ({ currentRoom }) => {
   return (
     <>
       <Sprite
-        image='./images/deathSpiral.png'
-        pivot={512}
-        x={256}
-        y={256}
+        image="./images/interactable.png"
+        width={512}
+        height={512}
+        tint={0x990000}
+      />
+      <Sprite
+        image="./images/deathSpiral.png"
+        pivot={1024}
+        x={270}
+        y={300}
+        scale={0.5}
         rotation={rotation}
       />
-    <Sprite
-      image={`./images/${currentRoom?.image}`}
-      alpha={roomAlpha}
-    />    
+      <Sprite
+        image={`./images/${currentRoom?.image}`}
+        alpha={roomAlpha}
+      />
     </>
-
   )
 }
 
