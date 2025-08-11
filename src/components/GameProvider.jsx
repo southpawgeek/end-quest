@@ -1,5 +1,6 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useRef } from "react"
 import data from "../data"
+import { validateAndLogCartridge } from "../utils/validation"
 import useSound from "use-sound"
 import soundBoop from "../sounds/boop.wav"
 import soundExit from "../sounds/exit.wav"
@@ -9,6 +10,13 @@ import soundDead from "../sounds/dead.wav"
 export const GameContext = createContext()
 
 export const GameProvider = ({ children }) => {
+  // Validate the cartridge data only once at engine startup
+  const hasValidated = useRef(false)
+  if (!hasValidated.current) {
+    validateAndLogCartridge(data)
+    hasValidated.current = true
+  }
+  
   const { config, content } = data
   const { rooms, tasks } = content
   const { actions } = config
