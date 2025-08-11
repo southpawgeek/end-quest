@@ -92,8 +92,10 @@ const actionSets = {
       ],
     },
     default: {
-      description: ["You walk straight into the boards, imagining they would somehow let you through. You imagined wrong."]
-    }
+      description: [
+        "You walk straight into the boards, imagining they would somehow let you through. You imagined wrong.",
+      ],
+    },
   },
   foyerKitchen: {
     examine: { description: ["The kitchen lies beyond this door."] },
@@ -349,16 +351,16 @@ const rooms = {
       {
         name: "startChair",
         image: "interactable.png",
-        x: 345,
-        y: 250,
-        width: 55,
-        height: 110,
+        x: 300,
+        y: 270,
+        width: 60,
+        height: 120,
         actions: actionSets.startChair,
       },
       {
         name: "startHole",
         image: "interactable.png",
-        x: 125,
+        x: 120,
         y: 395,
         width: 90,
         height: 80,
@@ -367,10 +369,10 @@ const rooms = {
       {
         name: "startDoor",
         image: "interactable.png",
-        x: 240,
-        y: 140,
-        width: 90,
-        height: 140,
+        x: 190,
+        y: 200,
+        width: 60,
+        height: 120,
         actions: actionSets.startDoorway,
       },
     ],
