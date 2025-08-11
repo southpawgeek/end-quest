@@ -2,6 +2,7 @@ import { createContext, useState, useRef } from "react"
 import data from "../data"
 import { validateAndLogCartridge } from "../utils/validation"
 import { useGameSounds } from "../hooks/useGameSounds"
+import { useGameState } from "../hooks/useGameState"
 
 export const GameContext = createContext()
 
@@ -17,24 +18,13 @@ export const GameProvider = ({ children }) => {
   const { rooms, tasks } = content
   const { actions } = config
 
-  const [currentRoom, setCurrentRoom] = useState(rooms[config.startingRoom])
+  // Game state management
+  const gameState = useGameState(rooms, tasks, config.startingRoom)
+  const { currentRoom, taskPercentage, clearVisitedRooms, navigateToRoom, isDeathRoom } = gameState
+
   const [currentDescription, setCurrentDescription] = useState(
     currentRoom.description
   )
-
-  const [visitedRooms, setVisitedRooms] = useState([config.startingRoom])
-  const addVisitedRoom = (roomKey) => {
-    const index = visitedRooms.indexOf(roomKey)
-    if (index === -1) {
-      let updatedRooms = [...visitedRooms]
-      updatedRooms.push(roomKey)
-      setVisitedRooms(updatedRooms)
-    }
-  }
-  const clearVisitedRooms = () => setVisitedRooms([])
-
-  const completedTasks = tasks.filter((task) => visitedRooms.includes(task.key))
-  const taskPercentage = (completedTasks.length / tasks.length) * 100
 
   const [currentAction, setCurrentAction] = useState("default")
 
@@ -55,8 +45,8 @@ export const GameProvider = ({ children }) => {
   }
   const handleLeaveAction = () => {
     if (taskPercentage === 100) {
-      setCurrentRoom(rooms[config.epilogueRoom])
-      setCurrentDescription(rooms[config.epilogueRoom].description)
+      const epilogueRoom = navigateToRoom(config.epilogueRoom)
+      setCurrentDescription(epilogueRoom.description)
       clearVisitedRooms()
       sounds.playDone()
     } else {
@@ -68,9 +58,8 @@ export const GameProvider = ({ children }) => {
   }
   // movement
   const handleExit = (exit) => {
-    setCurrentRoom(exit)
+    navigateToRoom(exit.key)
     setCurrentDescription(exit.description)
-    addVisitedRoom(exit.key)
     sounds.playMove()
   }
   // viewport
@@ -81,14 +70,12 @@ export const GameProvider = ({ children }) => {
     }
 
     if (actions?.[currentAction]?.nextRoom) {
-      const nextRoom = rooms[actions[currentAction].nextRoom]
+      const nextRoom = navigateToRoom(actions[currentAction].nextRoom)
 
-      setCurrentRoom(nextRoom)
-      addVisitedRoom(nextRoom.key)
       setCurrentDescription(nextRoom.description)
       setCurrentAction("default")
       // if it's a death room, play the sound
-      if (nextRoom.key.includes("death")) {
+      if (isDeathRoom(nextRoom)) {
         sounds.playDead()
       } else {
         sounds.playMoveWithVariation()
@@ -103,12 +90,8 @@ export const GameProvider = ({ children }) => {
         currentDescription,
         setCurrentDescription,
         currentRoom,
-        setCurrentRoom,
-        clearVisitedRooms,
         tasks,
         taskPercentage,
-        visitedRooms,
-        addVisitedRoom,
         actions,
         currentAction,
         setCurrentAction,
@@ -117,6 +100,8 @@ export const GameProvider = ({ children }) => {
         handleLeaveAction,
         handleExit,
         handleInteraction,
+        // Expose game state for components that need it
+        ...gameState
       }}
     >
       {children}
