@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 
 /**
@@ -22,5 +23,7 @@ TaskItem.propTypes = {
   isCompleted: PropTypes.bool,
   className: PropTypes.string
 }
+
+TaskItem.displayName = 'TaskItem'
 
 export default TaskItem

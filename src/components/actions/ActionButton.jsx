@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 
 /**
@@ -15,6 +16,28 @@ const ActionButton = ({
   const baseClass = isActive ? "active-action" : "inactive-action"
   const finalClass = `${baseClass} ${className}`.trim()
   
+  const handleClick = useCallback(() => {
+    if (onClick) onClick()
+  }, [onClick])
+  
+  const handleCancel = useCallback(() => {
+    if (onCancel) onCancel()
+  }, [onCancel])
+  
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      if (onClick) onClick()
+    }
+  }, [onClick])
+  
+  const handleCancelKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      if (onCancel) onCancel()
+    }
+  }, [onCancel])
+  
   if (!isEnabled) {
     return (
       <span className={`${finalClass} disabled`}>
@@ -30,15 +53,10 @@ const ActionButton = ({
         &nbsp;
         <span
           className="active-cancel"
-          onClick={onCancel}
+          onClick={handleCancel}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              onCancel()
-            }
-          }}
+          onKeyDown={handleCancelKeyDown}
         >
           [x]
         </span>
@@ -49,15 +67,10 @@ const ActionButton = ({
   return (
     <span
       className={finalClass}
-      onClick={onClick}
+      onClick={handleClick}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onClick()
-        }
-      }}
+      onKeyDown={handleKeyDown}
     >
       {children || action}
     </span>
@@ -73,5 +86,7 @@ ActionButton.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node
 }
+
+ActionButton.displayName = 'ActionButton'
 
 export default ActionButton

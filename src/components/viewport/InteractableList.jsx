@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Interactable from '../Interactable'
 
@@ -9,17 +10,17 @@ const InteractableList = ({ interactables, onInteraction }) => {
     return null
   }
 
-  return (
-    <>
-      {interactables.map((interactable) => (
-        <Interactable
-          key={interactable.name}
-          interactable={interactable}
-          handler={onInteraction}
-        />
-      ))}
-    </>
+  const interactableElements = useMemo(() => 
+    interactables.map((interactable) => (
+      <Interactable
+        key={interactable.name}
+        interactable={interactable}
+        handler={onInteraction}
+      />
+    )), [interactables, onInteraction]
   )
+
+  return <>{interactableElements}</>
 }
 
 InteractableList.propTypes = {
@@ -36,5 +37,7 @@ InteractableList.propTypes = {
   ),
   onInteraction: PropTypes.func.isRequired
 }
+
+InteractableList.displayName = 'InteractableList'
 
 export default InteractableList

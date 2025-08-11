@@ -2,6 +2,7 @@ import { useGameProvider } from "../hooks/useGameProvider"
 import GameStage from "./viewport/GameStage"
 import RoomRenderer from "./viewport/RoomRenderer"
 import InteractableList from "./viewport/InteractableList"
+import RoomErrorBoundary from "./error/RoomErrorBoundary"
 
 /**
  * Main Viewport component that manages the game rendering area
@@ -20,11 +21,13 @@ const Viewport = () => {
       currentAction={currentAction}
       onPointerDown={handlePointerDown}
     >
-      <RoomRenderer currentRoom={currentRoom} />
-      <InteractableList
-        interactables={currentRoom?.interactables}
-        onInteraction={handleInteraction}
-      />
+      <RoomErrorBoundary>
+        <RoomRenderer currentRoom={currentRoom} />
+        <InteractableList
+          interactables={currentRoom?.interactables}
+          onInteraction={handleInteraction}
+        />
+      </RoomErrorBoundary>
     </GameStage>
   )
 }
