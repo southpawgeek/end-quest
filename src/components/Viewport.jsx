@@ -3,6 +3,7 @@ import { Stage } from "@pixi/react"
 import RoomSprite from "./RoomSprite"
 import Interactable from "./Interactable"
 import DeathRoom from "./DeathRoom"
+import { GAME_CONSTANTS } from "../constants/game"
 
 const Viewport = () => {
   const { currentRoom, currentAction, handleInteraction } = useGameProvider()
@@ -19,8 +20,8 @@ const Viewport = () => {
       className={`cursor-${currentAction}`}
     >
       <Stage
-        width={495}
-        height={495}
+        width={GAME_CONSTANTS.VIEWPORT_SIZE}
+        height={GAME_CONSTANTS.VIEWPORT_SIZE}
         onPointerDown={handlePointerDown}
       >
         {currentRoom?.isDeath ? (

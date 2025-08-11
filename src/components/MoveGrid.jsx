@@ -1,4 +1,5 @@
 import { useGameProvider } from "../hooks/useGameProvider"
+import { GAME_CONSTANTS } from "../constants/game"
 
 const MoveGrid = () => {
   const { rooms, currentRoom, handleExit } = useGameProvider()
@@ -19,9 +20,9 @@ const MoveGrid = () => {
 
   // 3x3 movement grid
   const rows = [
-    ["a1", "a2", "a3"],
-    ["b1", "b2", "b3"],
-    ["c1", "c2", "c3"],
+    [GAME_CONSTANTS.GRID_COORDINATES.A1, GAME_CONSTANTS.GRID_COORDINATES.A2, GAME_CONSTANTS.GRID_COORDINATES.A3],
+    [GAME_CONSTANTS.GRID_COORDINATES.B1, GAME_CONSTANTS.GRID_COORDINATES.B2, GAME_CONSTANTS.GRID_COORDINATES.B3],
+    [GAME_CONSTANTS.GRID_COORDINATES.C1, GAME_CONSTANTS.GRID_COORDINATES.C2, GAME_CONSTANTS.GRID_COORDINATES.C3],
   ]
 
   return (

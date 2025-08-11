@@ -1,7 +1,9 @@
+import { DEFAULT_ACTIONS } from "./constants/game"
+
 // actions that will show up in the actions list
 // do not add default here
 // also, "leave" is a special action and does not go here
-const actions = ["examine", "use", "hit"]
+const actions = DEFAULT_ACTIONS
 
 // stuff that happens when each action occurs
 // description will just render a description
