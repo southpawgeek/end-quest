@@ -9,14 +9,16 @@ import soundDead from "../sounds/dead.wav"
 export const GameContext = createContext()
 
 export const GameProvider = ({ children }) => {
-  const { actions, rooms, tasks } = data
+  const { config, content } = data
+  const { rooms, tasks } = content
+  const { actions } = config
 
-  const [currentRoom, setCurrentRoom] = useState(rooms.start)
+  const [currentRoom, setCurrentRoom] = useState(rooms[config.startingRoom])
   const [currentDescription, setCurrentDescription] = useState(
     currentRoom.description
   )
 
-  const [visitedRooms, setVisitedRooms] = useState(["start"])
+  const [visitedRooms, setVisitedRooms] = useState([config.startingRoom])
   const addVisitedRoom = (roomKey) => {
     const index = visitedRooms.indexOf(roomKey)
     if (index === -1) {
@@ -54,8 +56,8 @@ export const GameProvider = ({ children }) => {
   }
   const handleLeaveAction = () => {
     if (taskPercentage === 100) {
-      setCurrentRoom(rooms.epilogue)
-      setCurrentDescription(rooms.epilogue.description)
+      setCurrentRoom(rooms[config.epilogueRoom])
+      setCurrentDescription(rooms[config.epilogueRoom].description)
       clearVisitedRooms()
       done()
     } else {

@@ -1,13 +1,24 @@
 import { DEFAULT_ACTIONS } from "./constants/game"
 
-// actions that will show up in the actions list
-// do not add default here
-// also, "leave" is a special action and does not go here
-const actions = DEFAULT_ACTIONS
+// ============================================================================
+// GAME CARTRIDGE DATA
+// ============================================================================
 
-// stuff that happens when each action occurs
-// description will just render a description
-// nextRoom will cause the action to change the room
+// Game configuration
+const gameConfig = {
+  actions: DEFAULT_ACTIONS,
+  startingRoom: "start",
+  epilogueRoom: "epilogue"
+}
+
+// ============================================================================
+// ACTION DEFINITIONS
+// ============================================================================
+// Each actionSet defines what happens when a player performs an action on an interactable
+// - description: Shows text to the player
+// - nextRoom: Transitions to a different room
+// - default: What happens when no specific action is selected
+
 const actionSets = {
   startDoorway: {
     hit: {
@@ -337,8 +348,18 @@ const actionSets = {
   },
 }
 
-// contains room descriptions, exits, and connects grid locations with actions
-// first room should be called "start"
+// ============================================================================
+// ROOM DEFINITIONS
+// ============================================================================
+// Each room contains:
+// - key: Unique identifier for the room
+// - name: Display name shown to the player
+// - image: Background image file
+// - description: Text description of the room
+// - exits: Grid coordinates that lead to other rooms
+// - interactables: Clickable objects in the room
+// - isDeath: Special flag for death rooms
+
 const rooms = {
   // rooms
   start: {
@@ -944,7 +965,12 @@ const rooms = {
   },
 }
 
-// refactor this later
+// ============================================================================
+// TASK DEFINITIONS
+// ============================================================================
+// Tasks represent death scenarios that players can discover
+// Each task corresponds to a death room and tracks completion
+
 const tasks = [
   {
     key: "deathChair",
@@ -984,6 +1010,18 @@ const tasks = [
   },
 ]
 
-const data = { actions, actionSets, rooms, tasks }
+// ============================================================================
+// CARTRIDGE EXPORT
+// ============================================================================
+// This is the complete game cartridge that gets loaded by the engine
 
-export default data
+const gameCartridge = {
+  config: gameConfig,
+  content: {
+    actionSets,
+    rooms,
+    tasks
+  }
+}
+
+export default gameCartridge
