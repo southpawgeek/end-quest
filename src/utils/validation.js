@@ -54,6 +54,28 @@ const validateConfig = (config) => {
     errors.push('Config.epilogueRoom must be a string')
   }
   
+  // Validate grid configuration if present
+  if (config.grid !== undefined) {
+    if (!isObject(config.grid)) {
+      errors.push('Config.grid must be an object')
+    } else {
+      if (config.grid.width !== undefined && !isNumber(config.grid.width)) {
+        errors.push('Config.grid.width must be a number')
+      }
+      if (config.grid.height !== undefined && !isNumber(config.grid.height)) {
+        errors.push('Config.grid.height must be a number')
+      }
+      
+      // Validate grid dimensions are within valid range (1-26)
+      if (config.grid.width !== undefined && (config.grid.width < 1 || config.grid.width > 26)) {
+        errors.push('Config.grid.width must be between 1 and 26')
+      }
+      if (config.grid.height !== undefined && (config.grid.height < 1 || config.grid.height > 26)) {
+        errors.push('Config.grid.height must be between 1 and 26')
+      }
+    }
+  }
+  
   // Validate UI text if present
   if (config.ui !== undefined) {
     if (!isObject(config.ui)) {

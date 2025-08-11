@@ -9,6 +9,11 @@ const gameConfig = {
   actions: DEFAULT_ACTIONS,
   startingRoom: "start",
   epilogueRoom: "epilogue",
+  // Grid configuration
+  grid: {
+    width: 3, // Number of columns (A, B, C, etc.)
+    height: 3  // Number of rows (1, 2, 3, etc.)
+  },
   // UI text strings for localization
   ui: {
     // Action prompts

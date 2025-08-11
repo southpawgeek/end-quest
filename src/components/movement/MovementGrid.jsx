@@ -7,12 +7,13 @@ import ExitButton from './ExitButton'
  * 3x3 movement grid component with enhanced accessibility
  */
 const MovementGrid = memo(({ exits, rooms, onExitClick, className = "", config = {} }) => {
-  // 3x3 movement grid layout
-  const rows = useMemo(() => [
-    [GAME_CONSTANTS.GRID_COORDINATES.A1, GAME_CONSTANTS.GRID_COORDINATES.A2, GAME_CONSTANTS.GRID_COORDINATES.A3],
-    [GAME_CONSTANTS.GRID_COORDINATES.B1, GAME_CONSTANTS.GRID_COORDINATES.B2, GAME_CONSTANTS.GRID_COORDINATES.B3],
-    [GAME_CONSTANTS.GRID_COORDINATES.C1, GAME_CONSTANTS.GRID_COORDINATES.C2, GAME_CONSTANTS.GRID_COORDINATES.C3],
-  ], [])
+  // Dynamic movement grid layout
+  const rows = useMemo(() => {
+    const gridConfig = config.grid || { width: 3, height: 3 }
+    const width = gridConfig.width || 3
+    const height = gridConfig.height || 3
+    return GAME_CONSTANTS.generateGridLayout(width, height)
+  }, [config.grid])
 
   const ui = config.ui || {}
 

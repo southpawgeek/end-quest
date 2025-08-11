@@ -12,22 +12,85 @@ describe('Game Constants', () => {
       expect(GAME_CONSTANTS.VIEWPORT_SIZE).toBe(495)
     })
 
-    it('has correct grid size', () => {
-      expect(GAME_CONSTANTS.GRID_SIZE).toBe(3)
+    it('has deprecated grid size note', () => {
+      // Grid size is now configured in cartridge data, not constants
+      expect(GAME_CONSTANTS.VIEWPORT_SIZE).toBe(495)
     })
 
-    it('has all grid coordinates', () => {
-      const expectedCoordinates = {
-        A1: 'a1', A2: 'a2', A3: 'a3',
-        B1: 'b1', B2: 'b2', B3: 'b3',
-        C1: 'c1', C2: 'c2', C3: 'c3'
-      }
-      expect(GAME_CONSTANTS.GRID_COORDINATES).toEqual(expectedCoordinates)
+    describe('generateGridCoordinates', () => {
+      it('generates 3x3 grid coordinates correctly', () => {
+        const coordinates = GAME_CONSTANTS.generateGridCoordinates(3, 3)
+        const expectedCoordinates = {
+          A1: 'a1', A2: 'a2', A3: 'a3',
+          B1: 'b1', B2: 'b2', B3: 'b3',
+          C1: 'c1', C2: 'c2', C3: 'c3'
+        }
+        expect(coordinates).toEqual(expectedCoordinates)
+      })
+
+      it('generates 5x5 grid coordinates correctly', () => {
+        const coordinates = GAME_CONSTANTS.generateGridCoordinates(5, 5)
+        expect(coordinates.A1).toBe('a1')
+        expect(coordinates.A5).toBe('a5')
+        expect(coordinates.E1).toBe('e1')
+        expect(coordinates.E5).toBe('e5')
+        expect(Object.keys(coordinates)).toHaveLength(25)
+      })
+
+      it('generates 4x3 grid coordinates correctly', () => {
+        const coordinates = GAME_CONSTANTS.generateGridCoordinates(4, 3)
+        expect(coordinates.A1).toBe('a1')
+        expect(coordinates.A4).toBe('a4')
+        expect(coordinates.C1).toBe('c1')
+        expect(coordinates.C4).toBe('c4')
+        expect(Object.keys(coordinates)).toHaveLength(12)
+      })
+
+      it('uses default 3x3 when no parameters provided', () => {
+        const coordinates = GAME_CONSTANTS.generateGridCoordinates()
+        expect(Object.keys(coordinates)).toHaveLength(9)
+        expect(coordinates.A1).toBe('a1')
+        expect(coordinates.C3).toBe('c3')
+      })
+
+      it('handles large grid sizes', () => {
+        const coordinates = GAME_CONSTANTS.generateGridCoordinates(10, 10)
+        expect(coordinates.A1).toBe('a1')
+        expect(coordinates.A10).toBe('a10')
+        expect(coordinates.J1).toBe('j1')
+        expect(coordinates.J10).toBe('j10')
+        expect(Object.keys(coordinates)).toHaveLength(100)
+      })
     })
 
-    it('has 9 grid coordinates total', () => {
-      const coordinates = Object.values(GAME_CONSTANTS.GRID_COORDINATES)
-      expect(coordinates).toHaveLength(9)
+    describe('generateGridLayout', () => {
+      it('generates 3x3 grid layout correctly', () => {
+        const layout = GAME_CONSTANTS.generateGridLayout(3, 3)
+        expect(layout).toHaveLength(3)
+        expect(layout[0]).toEqual(['a1', 'a2', 'a3'])
+        expect(layout[1]).toEqual(['b1', 'b2', 'b3'])
+        expect(layout[2]).toEqual(['c1', 'c2', 'c3'])
+      })
+
+      it('generates 5x5 grid layout correctly', () => {
+        const layout = GAME_CONSTANTS.generateGridLayout(5, 5)
+        expect(layout).toHaveLength(5)
+        expect(layout[0]).toEqual(['a1', 'a2', 'a3', 'a4', 'a5'])
+        expect(layout[4]).toEqual(['e1', 'e2', 'e3', 'e4', 'e5'])
+      })
+
+      it('generates 4x3 grid layout correctly', () => {
+        const layout = GAME_CONSTANTS.generateGridLayout(4, 3)
+        expect(layout).toHaveLength(3)
+        expect(layout[0]).toEqual(['a1', 'a2', 'a3', 'a4'])
+        expect(layout[2]).toEqual(['c1', 'c2', 'c3', 'c4'])
+      })
+
+      it('uses default 3x3 when no parameters provided', () => {
+        const layout = GAME_CONSTANTS.generateGridLayout()
+        expect(layout).toHaveLength(3)
+        expect(layout[0]).toEqual(['a1', 'a2', 'a3'])
+      })
     })
   })
 
