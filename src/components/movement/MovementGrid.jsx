@@ -48,19 +48,21 @@ const MovementGrid = memo(({ exits, rooms, onExitClick, className = "", config =
   const movementDescription = (ui.movementDescription || "Movement grid with {count} available exits. Use Tab to navigate between exits, then press Enter or Space to move.").replace('{count}', availableExits)
 
   return (
-    <table 
-      className={className}
-      role="grid"
-      aria-label={ui.movementGridLabel || "Movement grid"}
-      aria-describedby="movement-description"
-    >
-      <tbody>
-        {gridRows}
-      </tbody>
+    <>
+      <table 
+        className={className}
+        role="grid"
+        aria-label={ui.movementGridLabel || "Movement grid"}
+        aria-describedby="movement-description"
+      >
+        <tbody>
+          {gridRows}
+        </tbody>
+      </table>
       <span id="movement-description" className="sr-only">
         {movementDescription}
       </span>
-    </table>
+    </>
   )
 })
 

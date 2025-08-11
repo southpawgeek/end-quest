@@ -81,6 +81,7 @@ export const GameProvider = ({ children }) => {
     handleLeaveAction: handleLeaveActionWrapper,
     handleExit,
     handleInteraction,
+    config,
     // Expose game state for components that need it
     ...gameState
   }), [
@@ -98,6 +99,7 @@ export const GameProvider = ({ children }) => {
     handleLeaveActionWrapper,
     handleExit,
     handleInteraction,
+    config,
     gameState
   ])
 
