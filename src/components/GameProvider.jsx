@@ -1,11 +1,7 @@
 import { createContext, useState, useRef } from "react"
 import data from "../data"
 import { validateAndLogCartridge } from "../utils/validation"
-import useSound from "use-sound"
-import soundBoop from "../sounds/boop.wav"
-import soundExit from "../sounds/exit.wav"
-import soundMove from "../sounds/move.wav"
-import soundDead from "../sounds/dead.wav"
+import { useGameSounds } from "../hooks/useGameSounds"
 
 export const GameContext = createContext()
 
@@ -43,36 +39,31 @@ export const GameProvider = ({ children }) => {
   const [currentAction, setCurrentAction] = useState("default")
 
   // sounds
-  const [playbackRate, setPlaybackRate] = useState(Math.random() * (2 - 1) + 1)
-  const [boop] = useSound(soundBoop)
-  const [cancelBoop] = useSound(soundBoop, { playbackRate: 0.5 })
-  const [done] = useSound(soundExit)
-  const [move] = useSound(soundMove, { playbackRate })
-  const [dead] = useSound(soundDead, { playbackRate })
+  const sounds = useGameSounds()
 
   // actions
   const handleSelectAction = (action) => {
     setCurrentAction(action)
     const description = `What would you like to ${action}?`
     setCurrentDescription([description])
-    boop()
+    sounds.playBoop()
   }
   const handleCancelAction = () => {
     setCurrentAction("default")
     setCurrentDescription(currentRoom.description)
-    cancelBoop()
+    sounds.playCancelBoop()
   }
   const handleLeaveAction = () => {
     if (taskPercentage === 100) {
       setCurrentRoom(rooms[config.epilogueRoom])
       setCurrentDescription(rooms[config.epilogueRoom].description)
       clearVisitedRooms()
-      done()
+      sounds.playDone()
     } else {
       setCurrentDescription([
         "You aren't sure how you would leave the house. Perhaps you have some unfinished business here?",
       ])
-      cancelBoop()
+      sounds.playCancelBoop()
     }
   }
   // movement
@@ -80,8 +71,7 @@ export const GameProvider = ({ children }) => {
     setCurrentRoom(exit)
     setCurrentDescription(exit.description)
     addVisitedRoom(exit.key)
-    move()
-    setPlaybackRate(Math.random() * (2 - 1) + 1)
+    sounds.playMove()
   }
   // viewport
   const handleInteraction = (actions) => {
@@ -99,12 +89,9 @@ export const GameProvider = ({ children }) => {
       setCurrentAction("default")
       // if it's a death room, play the sound
       if (nextRoom.key.includes("death")) {
-        dead()
-        // have a little fun with it :)
-        setPlaybackRate(Math.random() * (1.3 - 0.7) + 0.7)
+        sounds.playDead()
       } else {
-        move()
-        setPlaybackRate(Math.random() * (1.3 - 0.7) + 0.7)
+        sounds.playMoveWithVariation()
       }
     }
   }
