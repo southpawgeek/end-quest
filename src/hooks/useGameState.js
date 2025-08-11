@@ -45,7 +45,7 @@ export const useGameState = (rooms, tasks, startingRoom) => {
 
   // Check if a room is a death room
   const isDeathRoom = useCallback((room) => {
-    return room.key.includes("death")
+    return !!room.isDeath
   }, [])
 
   // Get room by key
