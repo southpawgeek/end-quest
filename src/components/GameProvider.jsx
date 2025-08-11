@@ -3,6 +3,7 @@ import data from "../data"
 import { validateAndLogCartridge } from "../utils/validation"
 import { useGameSounds } from "../hooks/useGameSounds"
 import { useGameState } from "../hooks/useGameState"
+import { useGameActions } from "../hooks/useGameActions"
 
 export const GameContext = createContext()
 
@@ -26,61 +27,32 @@ export const GameProvider = ({ children }) => {
     currentRoom.description
   )
 
-  const [currentAction, setCurrentAction] = useState("default")
-
   // sounds
   const sounds = useGameSounds()
 
-  // actions
-  const handleSelectAction = (action) => {
-    setCurrentAction(action)
-    const description = `What would you like to ${action}?`
-    setCurrentDescription([description])
-    sounds.playBoop()
-  }
-  const handleCancelAction = () => {
-    setCurrentAction("default")
-    setCurrentDescription(currentRoom.description)
-    sounds.playCancelBoop()
-  }
-  const handleLeaveAction = () => {
-    if (taskPercentage === 100) {
-      const epilogueRoom = navigateToRoom(config.epilogueRoom)
-      setCurrentDescription(epilogueRoom.description)
-      clearVisitedRooms()
-      sounds.playDone()
-    } else {
-      setCurrentDescription([
-        "You aren't sure how you would leave the house. Perhaps you have some unfinished business here?",
-      ])
-      sounds.playCancelBoop()
-    }
-  }
+  // action management
+  const actionHandlers = useGameActions(
+    actions, 
+    sounds, 
+    setCurrentDescription, 
+    navigateToRoom, 
+    isDeathRoom,
+    config
+  )
+  const { 
+    currentAction, 
+    setCurrentAction, 
+    handleSelectAction, 
+    handleCancelAction, 
+    handleInteraction, 
+    handleLeaveAction 
+  } = actionHandlers
+
   // movement
   const handleExit = (exit) => {
     navigateToRoom(exit.key)
     setCurrentDescription(exit.description)
     sounds.playMove()
-  }
-  // viewport
-  const handleInteraction = (actions) => {
-    if (actions?.[currentAction]?.description) {
-      setCurrentDescription(actions[currentAction].description)
-      setCurrentAction("default")
-    }
-
-    if (actions?.[currentAction]?.nextRoom) {
-      const nextRoom = navigateToRoom(actions[currentAction].nextRoom)
-
-      setCurrentDescription(nextRoom.description)
-      setCurrentAction("default")
-      // if it's a death room, play the sound
-      if (isDeathRoom(nextRoom)) {
-        sounds.playDead()
-      } else {
-        sounds.playMoveWithVariation()
-      }
-    }
   }
 
   return (
@@ -96,8 +68,8 @@ export const GameProvider = ({ children }) => {
         currentAction,
         setCurrentAction,
         handleSelectAction,
-        handleCancelAction,
-        handleLeaveAction,
+        handleCancelAction: () => handleCancelAction(currentRoom.description),
+        handleLeaveAction: () => handleLeaveAction(taskPercentage, config.epilogueRoom, clearVisitedRooms),
         handleExit,
         handleInteraction,
         // Expose game state for components that need it

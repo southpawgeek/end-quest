@@ -8,7 +8,12 @@ import { DEFAULT_ACTIONS } from "./constants/game"
 const gameConfig = {
   actions: DEFAULT_ACTIONS,
   startingRoom: "start",
-  epilogueRoom: "epilogue"
+  epilogueRoom: "epilogue",
+  // UI text strings for localization
+  ui: {
+    actionPrompt: "What would you like to {action}?",
+    cannotLeaveMessage: "You aren't sure how you would leave the house. Perhaps you have some unfinished business here?"
+  }
 }
 
 // ============================================================================

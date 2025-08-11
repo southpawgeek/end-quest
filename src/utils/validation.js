@@ -54,6 +54,20 @@ const validateConfig = (config) => {
     errors.push('Config.epilogueRoom must be a string')
   }
   
+  // Validate UI text if present
+  if (config.ui !== undefined) {
+    if (!isObject(config.ui)) {
+      errors.push('Config.ui must be an object')
+    } else {
+      if (config.ui.actionPrompt !== undefined && !isString(config.ui.actionPrompt)) {
+        errors.push('Config.ui.actionPrompt must be a string')
+      }
+      if (config.ui.cannotLeaveMessage !== undefined && !isString(config.ui.cannotLeaveMessage)) {
+        errors.push('Config.ui.cannotLeaveMessage must be a string')
+      }
+    }
+  }
+  
   return errors
 }
 
