@@ -14,11 +14,12 @@ const Actions = memo(() => {
     handleCancelAction,
     handleLeaveAction,
     handleSelectAction,
+    config
   } = useGameProvider()
 
   return (
     <div id="actions">
-      <h2>Actions</h2>
+      <h2>{config.ui.actionsHeader}</h2>
       <hr />
       <ActionList
         actions={actions}
@@ -28,6 +29,7 @@ const Actions = memo(() => {
         onActionSelect={handleSelectAction}
         onActionCancel={handleCancelAction}
         onLeaveAction={handleLeaveAction}
+        config={config}
       />
     </div>
   )

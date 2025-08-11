@@ -1,15 +1,17 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import ActionButton from './ActionButton'
+import { getLeaveButtonText } from '../../utils/text'
 
 /**
- * Specialized leave button component
+ * Specialized leave button component with enhanced accessibility
  */
 const LeaveButton = memo(({ 
   taskPercentage, 
   isVisible = true, 
   onClick,
-  className = "" 
+  className = "",
+  config = {}
 }) => {
   if (!isVisible) {
     return null
@@ -18,15 +20,19 @@ const LeaveButton = memo(({
   const isEnabled = taskPercentage === 100
   const finalClass = isEnabled ? "glow" : "inactive-action"
   
+  const ariaLabel = getLeaveButtonText(taskPercentage, config)
+  const ui = config.ui || {}
+  
   return (
     <ActionButton
-      action="Leave?"
+      action={ui.leaveButton || "Leave?"}
       isActive={false}
       isEnabled={isEnabled}
       onClick={onClick}
       className={`${finalClass} ${className}`.trim()}
+      aria-label={ariaLabel}
     >
-      Leave?
+      {ui.leaveButton || "Leave?"}
     </ActionButton>
   )
 })
@@ -35,7 +41,8 @@ LeaveButton.propTypes = {
   taskPercentage: PropTypes.number.isRequired,
   isVisible: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  config: PropTypes.object
 }
 
 export default LeaveButton

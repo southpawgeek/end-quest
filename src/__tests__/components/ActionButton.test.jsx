@@ -3,12 +3,24 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import ActionButton from '../../components/actions/ActionButton'
 
 describe('ActionButton', () => {
+  const mockConfig = {
+    ui: {
+      actionSelectLabel: '{action} (press to select)',
+      actionActiveLabel: '{action} (active - press to cancel)',
+      actionDisabledLabel: '{action} (disabled)',
+      cancelActionLabel: 'Cancel {action} action',
+      cancelActionDescription: 'Press to cancel the {action} action',
+      actionDescription: 'Press Enter or Space to select {action} action'
+    }
+  }
+
   const defaultProps = {
     action: 'examine',
     isActive: false,
     isEnabled: true,
     onClick: jest.fn(),
-    onCancel: jest.fn()
+    onCancel: jest.fn(),
+    config: mockConfig
   }
 
   beforeEach(() => {

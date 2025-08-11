@@ -9,7 +9,7 @@ import RoomErrorBoundary from "./error/RoomErrorBoundary"
  * Main Viewport component that manages the game rendering area
  */
 const Viewport = memo(() => {
-  const { currentRoom, currentAction, handleInteraction } = useGameProvider()
+  const { currentRoom, currentAction, handleInteraction, config } = useGameProvider()
 
   const handlePointerDown = useCallback((event) => {
     const x = event.nativeEvent.offsetX
@@ -22,7 +22,7 @@ const Viewport = memo(() => {
       currentAction={currentAction}
       onPointerDown={handlePointerDown}
     >
-      <RoomErrorBoundary>
+      <RoomErrorBoundary config={config}>
         <RoomRenderer currentRoom={currentRoom} />
         <InteractableList
           interactables={currentRoom?.interactables}

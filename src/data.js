@@ -11,8 +11,56 @@ const gameConfig = {
   epilogueRoom: "epilogue",
   // UI text strings for localization
   ui: {
+    // Action prompts
     actionPrompt: "What would you like to {action}?",
-    cannotLeaveMessage: "You aren't sure how you would leave the house. Perhaps you have some unfinished business here?"
+    cannotLeaveMessage: "You aren't sure how you would leave the house. Perhaps you have some unfinished business here?",
+    
+    // Section headers
+    actionsHeader: "Actions",
+    tasksHeader: "Tasks", 
+    exitsHeader: "Exits",
+    
+    // Leave button
+    leaveButton: "Leave?",
+    leaveButtonEnabled: "Leave the house (all tasks completed)",
+    leaveButtonDisabled: "Leave the house ({percentage}% of tasks completed, need 100%)",
+    
+    // Accessibility labels
+    availableActionsLabel: "Available actions",
+    gameTasksLabel: "Game tasks",
+    movementGridLabel: "Movement grid",
+    noExitAvailable: "No exit available",
+    
+    // Accessibility descriptions
+    actionsDescription: "Select an action to perform on objects in the current room.",
+    tasksDescription: "{completed} of {total} tasks completed.",
+    tasksAllCompleted: "All tasks completed! You can now leave the house.",
+    movementDescription: "Movement grid with {count} available exits. Use Tab to navigate between exits, then press Enter or Space to move.",
+    
+    // Exit labels
+    exitToLabel: "Exit to {name}",
+    exitDescription: "Press Enter or Space to exit to {name}",
+    
+    // Action button labels
+    actionSelectLabel: "{action} (press to select)",
+    actionActiveLabel: "{action} (active - press to cancel)",
+    actionDisabledLabel: "{action} (disabled)",
+    cancelActionLabel: "Cancel {action} action",
+    cancelActionDescription: "Press to cancel the {action} action",
+    actionDescription: "Press Enter or Space to select {action} action",
+    
+    // Task completion
+    taskCompleted: "task completed",
+    tasksCompleted: "tasks completed",
+    
+    // Error messages
+    roomLoadingError: "Room Loading Error",
+    roomLoadingErrorMessage: "There was a problem loading this room.",
+    tryAgain: "Try Again",
+    gameError: "Something went wrong with the game.",
+    gameErrorMessage: "The game encountered an unexpected error and needs to restart.",
+    restartGame: "Restart Game",
+    errorDetails: "Error Details (Development)"
   }
 }
 

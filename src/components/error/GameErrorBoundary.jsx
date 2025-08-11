@@ -30,16 +30,19 @@ class GameErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      const { config = {} } = this.props
+      const ui = config.ui || {}
+      
       return (
         <div className="error-boundary">
-          <h2>Something went wrong with the game.</h2>
-          <p>The game encountered an unexpected error and needs to restart.</p>
+          <h2>{ui.gameError || "Something went wrong with the game."}</h2>
+          <p>{ui.gameErrorMessage || "The game encountered an unexpected error and needs to restart."}</p>
           <button onClick={this.handleReset}>
-            Restart Game
+            {ui.restartGame || "Restart Game"}
           </button>
           {process.env.NODE_ENV === 'development' && (
             <details style={{ whiteSpace: 'pre-wrap', marginTop: '1rem' }}>
-              <summary>Error Details (Development)</summary>
+              <summary>{ui.errorDetails || "Error Details (Development)"}</summary>
               {this.state.error && this.state.error.toString()}
               <br />
               {this.state.errorInfo && this.state.errorInfo.componentStack}
@@ -54,7 +57,8 @@ class GameErrorBoundary extends React.Component {
 }
 
 GameErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  config: PropTypes.object
 }
 
 export default GameErrorBoundary

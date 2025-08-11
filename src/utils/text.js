@@ -15,17 +15,65 @@ export const interpolateText = (template, variables) => {
 }
 
 /**
- * Gets a UI text string from the game config
- * @param {object} config - Game configuration object
- * @param {string} key - Text key (e.g., 'actionPrompt', 'cannotLeaveMessage')
- * @param {object} variables - Variables for interpolation
- * @returns {string} - Interpolated text string
+ * Gets UI text from the game config with parameter substitution
+ * @param {Object} config - Game configuration object
+ * @param {string} key - UI text key
+ * @param {Object} params - Parameters to substitute in the text
+ * @returns {string} The localized text with parameters substituted
  */
-export const getUIText = (config, key, variables = {}) => {
-  const text = config.ui?.[key]
-  if (!text) {
-    console.warn(`UI text key '${key}' not found in config`)
+export const getUIText = (config, key, params = {}) => {
+  if (!config?.ui?.[key]) {
+    console.warn(`UI text key "${key}" not found in config`)
     return key
   }
-  return interpolateText(text, variables)
+  
+  let text = config.ui[key]
+  
+  // Substitute parameters in the text
+  Object.entries(params).forEach(([param, value]) => {
+    text = text.replace(new RegExp(`{${param}}`, 'g'), value)
+  })
+  
+  return text
+}
+
+/**
+ * Gets a formatted task completion message
+ * @param {number} completed - Number of completed tasks
+ * @param {number} total - Total number of tasks
+ * @param {Object} config - Game configuration object
+ * @returns {string} Formatted task completion message
+ */
+export const getTaskCompletionText = (completed, total, config) => {
+  if (!config?.ui) {
+    return `${completed} of ${total} tasks completed.`
+  }
+  
+  const baseText = getUIText(config, 'tasksDescription', { completed, total })
+  
+  if (completed === total) {
+    return `${baseText} ${getUIText(config, 'tasksAllCompleted')}`
+  }
+  
+  return baseText
+}
+
+/**
+ * Gets a formatted leave button text
+ * @param {number} taskPercentage - Task completion percentage
+ * @param {Object} config - Game configuration object
+ * @returns {string} Formatted leave button text
+ */
+export const getLeaveButtonText = (taskPercentage, config) => {
+  if (!config?.ui) {
+    return taskPercentage === 100 
+      ? "Leave the house (all tasks completed)"
+      : `Leave the house (${taskPercentage}% of tasks completed, need 100%)`
+  }
+  
+  if (taskPercentage === 100) {
+    return getUIText(config, 'leaveButtonEnabled')
+  }
+  
+  return getUIText(config, 'leaveButtonDisabled', { percentage: taskPercentage })
 }

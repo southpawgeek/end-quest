@@ -32,7 +32,9 @@ describe('TaskList', () => {
   it('renders empty list when no tasks provided', () => {
     render(<TaskList tasks={[]} visitedRooms={[]} />)
     const list = screen.getByRole('list')
-    expect(list.children).toHaveLength(0)
+    // Count only li elements, not the screen reader description span
+    const listItems = list.querySelectorAll('li')
+    expect(listItems).toHaveLength(0)
   })
 
   it('applies custom className', () => {

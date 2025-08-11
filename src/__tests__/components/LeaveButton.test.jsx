@@ -3,9 +3,18 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import LeaveButton from '../../components/actions/LeaveButton'
 
 describe('LeaveButton', () => {
+  const mockConfig = {
+    ui: {
+      leaveButton: 'Leave?',
+      leaveButtonEnabled: 'Leave the house (all tasks completed)',
+      leaveButtonDisabled: 'Leave the house ({percentage}% of tasks completed, need 100%)'
+    }
+  }
+
   const defaultProps = {
     taskPercentage: 50,
-    onClick: jest.fn()
+    onClick: jest.fn(),
+    config: mockConfig
   }
 
   beforeEach(() => {

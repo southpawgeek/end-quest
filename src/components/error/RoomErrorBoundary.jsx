@@ -25,16 +25,19 @@ class RoomErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      const { config = {} } = this.props
+      const ui = config.ui || {}
+      
       return (
         <div className="room-error">
-          <h3>Room Loading Error</h3>
-          <p>There was a problem loading this room.</p>
+          <h3>{ui.roomLoadingError || "Room Loading Error"}</h3>
+          <p>{ui.roomLoadingErrorMessage || "There was a problem loading this room."}</p>
           <button onClick={this.handleRetry}>
-            Try Again
+            {ui.tryAgain || "Try Again"}
           </button>
           {process.env.NODE_ENV === 'development' && (
             <details style={{ whiteSpace: 'pre-wrap', marginTop: '1rem' }}>
-              <summary>Error Details (Development)</summary>
+              <summary>{ui.errorDetails || "Error Details (Development)"}</summary>
               {this.state.error && this.state.error.toString()}
             </details>
           )}
@@ -47,7 +50,8 @@ class RoomErrorBoundary extends React.Component {
 }
 
 RoomErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  config: PropTypes.object
 }
 
 export default RoomErrorBoundary

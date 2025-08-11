@@ -2,7 +2,7 @@ import React, { useCallback, memo } from 'react'
 import PropTypes from 'prop-types'
 
 /**
- * Reusable action button component
+ * Reusable action button component with enhanced accessibility
  */
 const ActionButton = memo(({ 
   action, 
@@ -11,7 +11,8 @@ const ActionButton = memo(({
   onClick, 
   onCancel,
   className = "",
-  children 
+  children,
+  config = {}
 }) => {
   const baseClass = isActive ? "active-action" : "inactive-action"
   const finalClass = `${baseClass} ${className}`.trim()
@@ -37,11 +38,24 @@ const ActionButton = memo(({
       if (onCancel) onCancel()
     }
   }, [onCancel])
+
+  const buttonText = children || action
+  
+  // Provide fallback values for config.ui properties
+  const ui = config.ui || {}
+  const ariaLabel = isActive 
+    ? (ui.actionActiveLabel || `${buttonText} (active - press to cancel)`).replace('{action}', buttonText)
+    : (ui.actionSelectLabel || `${buttonText} (press to select)`).replace('{action}', buttonText)
   
   if (!isEnabled) {
     return (
-      <span className={`${finalClass} disabled`}>
-        {children || action}
+      <span 
+        className={`${finalClass} disabled`}
+        aria-label={(ui.actionDisabledLabel || `${buttonText} (disabled)`).replace('{action}', buttonText)}
+        role="button"
+        aria-disabled="true"
+      >
+        {buttonText}
       </span>
     )
   }
@@ -49,7 +63,14 @@ const ActionButton = memo(({
   if (isActive) {
     return (
       <>
-        <span className={finalClass}>{children || action}</span>
+        <span 
+          className={finalClass}
+          aria-label={ariaLabel}
+          role="button"
+          aria-pressed="true"
+        >
+          {buttonText}
+        </span>
         &nbsp;
         <span
           className="active-cancel"
@@ -57,8 +78,13 @@ const ActionButton = memo(({
           role="button"
           tabIndex={0}
           onKeyDown={handleCancelKeyDown}
+          aria-label={(ui.cancelActionLabel || `Cancel ${buttonText} action`).replace('{action}', buttonText)}
+          aria-describedby={`cancel-${action}-desc`}
         >
           [x]
+        </span>
+        <span id={`cancel-${action}-desc`} className="sr-only">
+          {(ui.cancelActionDescription || `Press to cancel the ${buttonText} action`).replace('{action}', buttonText)}
         </span>
       </>
     )
@@ -71,8 +97,14 @@ const ActionButton = memo(({
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
+      aria-label={ariaLabel}
+      aria-pressed="false"
+      aria-describedby={`${action}-desc`}
     >
-      {children || action}
+      {buttonText}
+      <span id={`${action}-desc`} className="sr-only">
+        {(ui.actionDescription || `Press Enter or Space to select ${buttonText} action`).replace('{action}', buttonText)}
+      </span>
     </span>
   )
 })
@@ -84,7 +116,8 @@ ActionButton.propTypes = {
   onClick: PropTypes.func,
   onCancel: PropTypes.func,
   className: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  config: PropTypes.object
 }
 
 ActionButton.displayName = 'ActionButton'

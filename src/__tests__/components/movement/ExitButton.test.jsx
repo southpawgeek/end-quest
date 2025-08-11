@@ -3,13 +3,21 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import ExitButton from '../../../components/movement/ExitButton'
 
 describe('ExitButton', () => {
+  const mockConfig = {
+    ui: {
+      exitToLabel: 'Exit to {name}',
+      exitDescription: 'Press Enter or Space to exit to {name}'
+    }
+  }
+
   const defaultProps = {
     exit: {
       key: 'north',
       name: 'north',
       description: ['Go north to the kitchen']
     },
-    onClick: jest.fn()
+    onClick: jest.fn(),
+    config: mockConfig
   }
 
   beforeEach(() => {
@@ -48,7 +56,7 @@ describe('ExitButton', () => {
   })
 
   it('handles missing exit gracefully', () => {
-    render(<ExitButton exit={null} onClick={jest.fn()} />)
+    render(<ExitButton exit={null} onClick={jest.fn()} config={mockConfig} />)
     const button = screen.getByRole('button')
     expect(button).toHaveAttribute('aria-label', 'Exit to N/A')
   })

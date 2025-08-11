@@ -89,7 +89,7 @@ describe('ActionList', () => {
         onLeaveAction={mockOnLeaveAction}
       />
     )
-    const list = screen.getByRole('list')
+    const list = screen.getByRole('listbox')
     expect(list.tagName).toBe('UL')
   })
 
