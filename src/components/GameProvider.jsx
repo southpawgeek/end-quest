@@ -100,7 +100,12 @@ export const GameProvider = ({ children }) => {
     handleExit,
     handleInteraction,
     config,
-    gameState
+    // Use specific gameState properties instead of the entire object
+    currentRoom,
+    taskPercentage,
+    clearVisitedRooms,
+    navigateToRoom,
+    isDeathRoom
   ])
 
   return (
