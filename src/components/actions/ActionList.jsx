@@ -1,3 +1,4 @@
+import React, { memo, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import ActionButton from './ActionButton'
 import LeaveButton from './LeaveButton'
@@ -5,7 +6,7 @@ import LeaveButton from './LeaveButton'
 /**
  * Component that renders a list of available actions
  */
-const ActionList = ({ 
+const ActionList = memo(({ 
   actions, 
   currentAction, 
   taskPercentage, 
@@ -14,18 +15,22 @@ const ActionList = ({
   onActionCancel, 
   onLeaveAction 
 }) => {
+  const actionButtons = useMemo(() => 
+    actions.map((action) => (
+      <li key={action}>
+        <ActionButton
+          action={action}
+          isActive={action === currentAction}
+          onClick={() => onActionSelect(action)}
+          onCancel={onActionCancel}
+        />
+      </li>
+    )), [actions, currentAction, onActionSelect, onActionCancel]
+  )
+
   return (
     <ul>
-      {actions.map((action) => (
-        <li key={action}>
-          <ActionButton
-            action={action}
-            isActive={action === currentAction}
-            onClick={() => onActionSelect(action)}
-            onCancel={onActionCancel}
-          />
-        </li>
-      ))}
+      {actionButtons}
       <li>
         <LeaveButton
           taskPercentage={taskPercentage}
@@ -35,7 +40,7 @@ const ActionList = ({
       </li>
     </ul>
   )
-}
+})
 
 ActionList.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, memo } from 'react'
 import PropTypes from 'prop-types'
 
 /**
  * Reusable action button component
  */
-const ActionButton = ({ 
+const ActionButton = memo(({ 
   action, 
   isActive, 
   isEnabled = true, 
@@ -75,7 +75,7 @@ const ActionButton = ({
       {children || action}
     </span>
   )
-}
+})
 
 ActionButton.propTypes = {
   action: PropTypes.string,

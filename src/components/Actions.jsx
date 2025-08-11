@@ -1,10 +1,11 @@
+import React, { memo } from 'react'
 import { useGameProvider } from "../hooks/useGameProvider"
 import ActionList from "./actions/ActionList"
 
 /**
  * Main Actions component that manages the action interface
  */
-const Actions = () => {
+const Actions = memo(() => {
   const {
     currentRoom,
     actions,
@@ -30,6 +31,8 @@ const Actions = () => {
       />
     </div>
   )
-}
+})
+
+Actions.displayName = 'Actions'
 
 export default Actions

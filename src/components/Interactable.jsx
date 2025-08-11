@@ -1,3 +1,4 @@
+import React, { memo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Sprite } from "@pixi/react"
 import "@pixi/events"
@@ -5,8 +6,12 @@ import "@pixi/events"
 /**
  * PIXI.js sprite component for clickable objects in rooms
  */
-const Interactable = ({ interactable, handler }) => {
+const Interactable = memo(({ interactable, handler }) => {
   const { x, y, width, height, actions, image } = interactable
+
+  const handlePointerDown = useCallback(() => {
+    handler(actions)
+  }, [handler, actions])
 
   return (
     <Sprite
@@ -17,10 +22,10 @@ const Interactable = ({ interactable, handler }) => {
       width={width}
       height={height}
       eventMode="static"
-      onpointerdown={() => handler(actions)}
+      onpointerdown={handlePointerDown}
     />
   )
-}
+})
 
 Interactable.propTypes = {
   interactable: PropTypes.shape({

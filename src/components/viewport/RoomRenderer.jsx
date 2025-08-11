@@ -1,3 +1,4 @@
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import RoomSprite from '../RoomSprite'
 import DeathRoom from '../DeathRoom'
@@ -5,7 +6,7 @@ import DeathRoom from '../DeathRoom'
 /**
  * Component that renders the appropriate room type
  */
-const RoomRenderer = ({ currentRoom }) => {
+const RoomRenderer = memo(({ currentRoom }) => {
   if (!currentRoom) {
     return null
   }
@@ -15,7 +16,7 @@ const RoomRenderer = ({ currentRoom }) => {
   }
 
   return <RoomSprite currentRoom={currentRoom} />
-}
+})
 
 RoomRenderer.propTypes = {
   currentRoom: PropTypes.shape({

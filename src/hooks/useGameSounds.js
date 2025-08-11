@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import useSound from "use-sound"
 import soundBoop from "../sounds/boop.wav"
 import soundExit from "../sounds/exit.wav"
@@ -17,33 +17,33 @@ export const useGameSounds = () => {
   const [move] = useSound(soundMove, { playbackRate })
   const [dead] = useSound(soundDead, { playbackRate })
 
-  const playBoop = () => {
+  const playBoop = useCallback(() => {
     boop()
-  }
+  }, [boop])
 
-  const playCancelBoop = () => {
+  const playCancelBoop = useCallback(() => {
     cancelBoop()
-  }
+  }, [cancelBoop])
 
-  const playDone = () => {
+  const playDone = useCallback(() => {
     done()
-  }
+  }, [done])
 
-  const playMove = () => {
+  const playMove = useCallback(() => {
     move()
     setPlaybackRate(Math.random() * (2 - 1) + 1)
-  }
+  }, [move])
 
-  const playDead = () => {
+  const playDead = useCallback(() => {
     dead()
     // Have a little fun with death sounds :)
     setPlaybackRate(Math.random() * (1.3 - 0.7) + 0.7)
-  }
+  }, [dead])
 
-  const playMoveWithVariation = () => {
+  const playMoveWithVariation = useCallback(() => {
     move()
     setPlaybackRate(Math.random() * (1.3 - 0.7) + 0.7)
-  }
+  }, [move])
 
   return {
     playBoop,

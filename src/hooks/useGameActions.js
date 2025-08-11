@@ -1,29 +1,29 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { getUIText } from "../utils/text"
 
 /**
  * Custom hook for managing game actions and interactions
  */
-export const useGameActions = (actions, sounds, setCurrentDescription, navigateToRoom, isDeathRoom, config) => {
+export const useGameActions = (actions, sounds, setCurrentDescription, navigateToRoom, isDeathRoom, config, clearVisitedRooms) => {
   const [currentAction, setCurrentAction] = useState("default")
 
   // Handle action selection
-  const handleSelectAction = (action) => {
+  const handleSelectAction = useCallback((action) => {
     setCurrentAction(action)
     const description = getUIText(config, 'actionPrompt', { action })
     setCurrentDescription([description])
     sounds.playBoop()
-  }
+  }, [setCurrentAction, setCurrentDescription, sounds, config])
 
   // Handle action cancellation
-  const handleCancelAction = (currentRoomDescription) => {
+  const handleCancelAction = useCallback((currentRoomDescription) => {
     setCurrentAction("default")
     setCurrentDescription(currentRoomDescription)
     sounds.playCancelBoop()
-  }
+  }, [setCurrentAction, setCurrentDescription, sounds])
 
   // Handle interaction with objects
-  const handleInteraction = (interactableActions) => {
+  const handleInteraction = useCallback((interactableActions) => {
     if (interactableActions?.[currentAction]?.description) {
       setCurrentDescription(interactableActions[currentAction].description)
       setCurrentAction("default")
@@ -42,10 +42,10 @@ export const useGameActions = (actions, sounds, setCurrentDescription, navigateT
         sounds.playMoveWithVariation()
       }
     }
-  }
+  }, [currentAction, setCurrentDescription, setCurrentAction, navigateToRoom, isDeathRoom, sounds])
 
   // Handle leave action (special case)
-  const handleLeaveAction = (taskPercentage, epilogueRoomKey, clearVisitedRooms) => {
+  const handleLeaveAction = useCallback((taskPercentage, epilogueRoomKey, clearVisitedRooms) => {
     if (taskPercentage === 100) {
       const epilogueRoom = navigateToRoom(epilogueRoomKey)
       setCurrentDescription(epilogueRoom.description)
@@ -57,13 +57,10 @@ export const useGameActions = (actions, sounds, setCurrentDescription, navigateT
       ])
       sounds.playCancelBoop()
     }
-  }
+  }, [navigateToRoom, setCurrentDescription, clearVisitedRooms, sounds, config])
 
   return {
-    // State
     currentAction,
-    
-    // Actions
     setCurrentAction,
     handleSelectAction,
     handleCancelAction,

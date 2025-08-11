@@ -1,10 +1,11 @@
+import React, { memo } from 'react'
 import { useGameProvider } from "../hooks/useGameProvider"
 import MovementGrid from "./movement/MovementGrid"
 
 /**
  * Main MoveGrid component that manages the movement interface
  */
-const MoveGrid = () => {
+const MoveGrid = memo(() => {
   const { rooms, currentRoom, handleExit } = useGameProvider()
   const exits = currentRoom.exits
 
@@ -18,6 +19,8 @@ const MoveGrid = () => {
       />
     </div>
   )
-}
+})
+
+MoveGrid.displayName = 'MoveGrid'
 
 export default MoveGrid

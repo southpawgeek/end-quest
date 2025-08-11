@@ -1,22 +1,27 @@
+import React, { useMemo, memo } from 'react'
 import PropTypes from 'prop-types'
 import TaskItem from './TaskItem'
 
 /**
  * Component that renders a list of tasks
  */
-const TaskList = ({ tasks, visitedRooms, className = "" }) => {
+const TaskList = memo(({ tasks, visitedRooms, className = "" }) => {
+  const taskItems = useMemo(() => 
+    tasks.map((task) => (
+      <TaskItem
+        key={task.key}
+        task={task}
+        isCompleted={visitedRooms.includes(task.key)}
+      />
+    )), [tasks, visitedRooms]
+  )
+
   return (
     <ul className={className}>
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.key}
-          task={task}
-          isCompleted={visitedRooms.includes(task.key)}
-        />
-      ))}
+      {taskItems}
     </ul>
   )
-}
+})
 
 TaskList.propTypes = {
   tasks: PropTypes.arrayOf(

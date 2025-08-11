@@ -1,3 +1,4 @@
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { Stage } from "@pixi/react"
 import { GAME_CONSTANTS } from "../../constants/game"
@@ -5,7 +6,7 @@ import { GAME_CONSTANTS } from "../../constants/game"
 /**
  * PIXI.js stage wrapper with cursor management
  */
-const GameStage = ({ 
+const GameStage = memo(({ 
   currentAction, 
   onPointerDown, 
   children,
@@ -28,7 +29,7 @@ const GameStage = ({
       </Stage>
     </div>
   )
-}
+})
 
 GameStage.propTypes = {
   currentAction: PropTypes.string.isRequired,

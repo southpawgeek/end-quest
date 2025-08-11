@@ -1,3 +1,4 @@
+import React, { useCallback, memo } from "react"
 import { useGameProvider } from "../hooks/useGameProvider"
 import GameStage from "./viewport/GameStage"
 import RoomRenderer from "./viewport/RoomRenderer"
@@ -7,14 +8,14 @@ import RoomErrorBoundary from "./error/RoomErrorBoundary"
 /**
  * Main Viewport component that manages the game rendering area
  */
-const Viewport = () => {
+const Viewport = memo(() => {
   const { currentRoom, currentAction, handleInteraction } = useGameProvider()
 
-  const handlePointerDown = (event) => {
+  const handlePointerDown = useCallback((event) => {
     const x = event.nativeEvent.offsetX
     const y = event.nativeEvent.offsetY
     console.log(x, y)
-  }
+  }, [])
 
   return (
     <GameStage
@@ -30,6 +31,8 @@ const Viewport = () => {
       </RoomErrorBoundary>
     </GameStage>
   )
-}
+})
+
+Viewport.displayName = 'Viewport'
 
 export default Viewport

@@ -3,7 +3,7 @@ import useSound from "use-sound"
 import soundBoop from "../sounds/boop.wav"
 
 const Wrapper = ({ children }) => {
-  const [welcome, setShowWelcome] = useState(false)
+  const [welcome, setShowWelcome] = useState(true)
   const [creditsOpen, setCreditsOpen] = useState(false)
 
   const [boop] = useSound(soundBoop)

@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, memo } from 'react'
 import PropTypes from 'prop-types'
 import Interactable from '../Interactable'
 
 /**
  * Component that renders all interactables in a room
  */
-const InteractableList = ({ interactables, onInteraction }) => {
+const InteractableList = memo(({ interactables, onInteraction }) => {
   if (!interactables || interactables.length === 0) {
     return null
   }
@@ -21,7 +21,7 @@ const InteractableList = ({ interactables, onInteraction }) => {
   )
 
   return <>{interactableElements}</>
-}
+})
 
 InteractableList.propTypes = {
   interactables: PropTypes.arrayOf(

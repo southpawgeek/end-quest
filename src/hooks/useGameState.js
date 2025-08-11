@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback } from "react"
 
 /**
  * Custom hook for managing core game state
@@ -8,17 +8,18 @@ export const useGameState = (rooms, tasks, startingRoom) => {
   const [visitedRooms, setVisitedRooms] = useState([startingRoom])
 
   // Add a room to visited rooms (no duplicates)
-  const addVisitedRoom = (roomKey) => {
-    const index = visitedRooms.indexOf(roomKey)
-    if (index === -1) {
-      let updatedRooms = [...visitedRooms]
-      updatedRooms.push(roomKey)
-      setVisitedRooms(updatedRooms)
-    }
-  }
+  const addVisitedRoom = useCallback((roomKey) => {
+    setVisitedRooms(prevRooms => {
+      const index = prevRooms.indexOf(roomKey)
+      if (index === -1) {
+        return [...prevRooms, roomKey]
+      }
+      return prevRooms
+    })
+  }, [])
 
   // Clear visited rooms (for game reset)
-  const clearVisitedRooms = () => setVisitedRooms([])
+  const clearVisitedRooms = useCallback(() => setVisitedRooms([]), [])
 
   // Calculate task completion
   const completedTasks = useMemo(() => 
@@ -32,7 +33,7 @@ export const useGameState = (rooms, tasks, startingRoom) => {
   )
 
   // Navigate to a new room
-  const navigateToRoom = (roomKey) => {
+  const navigateToRoom = useCallback((roomKey) => {
     const newRoom = rooms[roomKey]
     if (newRoom) {
       setCurrentRoom(newRoom)
@@ -40,17 +41,17 @@ export const useGameState = (rooms, tasks, startingRoom) => {
       return newRoom
     }
     return null
-  }
+  }, [rooms, addVisitedRoom])
 
   // Check if a room is a death room
-  const isDeathRoom = (room) => {
+  const isDeathRoom = useCallback((room) => {
     return room.key.includes("death")
-  }
+  }, [])
 
   // Get room by key
-  const getRoom = (roomKey) => {
+  const getRoom = useCallback((roomKey) => {
     return rooms[roomKey] || null
-  }
+  }, [rooms])
 
   return {
     // State

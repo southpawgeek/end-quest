@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 
 /**
  * Individual task item component
  */
-const TaskItem = ({ task, isCompleted, className = "" }) => {
+const TaskItem = memo(({ task, isCompleted, className = "" }) => {
   const taskClass = isCompleted ? "task-completed" : ""
   const finalClass = `${taskClass} ${className}`.trim()
   
@@ -13,7 +13,7 @@ const TaskItem = ({ task, isCompleted, className = "" }) => {
       {task.name}
     </li>
   )
-}
+})
 
 TaskItem.propTypes = {
   task: PropTypes.shape({

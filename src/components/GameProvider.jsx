@@ -1,4 +1,4 @@
-import { createContext, useState, useRef } from "react"
+import { createContext, useState, useRef, useCallback, useMemo } from "react"
 import data from "../data"
 import { validateAndLogCartridge } from "../utils/validation"
 import { useGameSounds } from "../hooks/useGameSounds"
@@ -37,7 +37,8 @@ export const GameProvider = ({ children }) => {
     setCurrentDescription, 
     navigateToRoom, 
     isDeathRoom,
-    config
+    config,
+    clearVisitedRooms
   )
   const { 
     currentAction, 
@@ -49,33 +50,59 @@ export const GameProvider = ({ children }) => {
   } = actionHandlers
 
   // movement
-  const handleExit = (exit) => {
+  const handleExit = useCallback((exit) => {
     navigateToRoom(exit.key)
     setCurrentDescription(exit.description)
     sounds.playMove()
-  }
+  }, [navigateToRoom, setCurrentDescription, sounds])
+
+  // Create memoized wrapper functions for context
+  const handleCancelActionWrapper = useCallback(() => {
+    handleCancelAction(currentRoom.description)
+  }, [handleCancelAction, currentRoom.description])
+
+  const handleLeaveActionWrapper = useCallback(() => {
+    handleLeaveAction(taskPercentage, config.epilogueRoom, clearVisitedRooms)
+  }, [handleLeaveAction, taskPercentage, config.epilogueRoom, clearVisitedRooms])
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    rooms,
+    currentDescription,
+    setCurrentDescription,
+    currentRoom,
+    tasks,
+    taskPercentage,
+    actions,
+    currentAction,
+    setCurrentAction,
+    handleSelectAction,
+    handleCancelAction: handleCancelActionWrapper,
+    handleLeaveAction: handleLeaveActionWrapper,
+    handleExit,
+    handleInteraction,
+    // Expose game state for components that need it
+    ...gameState
+  }), [
+    rooms,
+    currentDescription,
+    setCurrentDescription,
+    currentRoom,
+    tasks,
+    taskPercentage,
+    actions,
+    currentAction,
+    setCurrentAction,
+    handleSelectAction,
+    handleCancelActionWrapper,
+    handleLeaveActionWrapper,
+    handleExit,
+    handleInteraction,
+    gameState
+  ])
 
   return (
-    <GameContext.Provider
-      value={{
-        rooms,
-        currentDescription,
-        setCurrentDescription,
-        currentRoom,
-        tasks,
-        taskPercentage,
-        actions,
-        currentAction,
-        setCurrentAction,
-        handleSelectAction,
-        handleCancelAction: () => handleCancelAction(currentRoom.description),
-        handleLeaveAction: () => handleLeaveAction(taskPercentage, config.epilogueRoom, clearVisitedRooms),
-        handleExit,
-        handleInteraction,
-        // Expose game state for components that need it
-        ...gameState
-      }}
-    >
+    <GameContext.Provider value={contextValue}>
       {children}
     </GameContext.Provider>
   )

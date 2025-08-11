@@ -1,10 +1,11 @@
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import ActionButton from './ActionButton'
 
 /**
  * Specialized leave button component
  */
-const LeaveButton = ({ 
+const LeaveButton = memo(({ 
   taskPercentage, 
   isVisible = true, 
   onClick,
@@ -28,7 +29,7 @@ const LeaveButton = ({
       Leave?
     </ActionButton>
   )
-}
+})
 
 LeaveButton.propTypes = {
   taskPercentage: PropTypes.number.isRequired,
