@@ -22,3 +22,64 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Coverage reports and test artifacts
+coverage/
+*.lcov
+.nyc_output/
+coverage.json
+coverage.xml
+*.coverage
+*.coverage.*
+
+# Jest
+.jest/
+jest-coverage/
+test-results/
+test-report.xml
+
+# Test snapshots (if you want to exclude them)
+# __snapshots__/
+
+# Temporary test files
+*.test.js.snap
+*.test.jsx.snap
+*.test.ts.snap
+*.test.tsx.snap
+
+# Performance monitoring
+.nyc_output
+coverage/
+*.lcov
+
+# Test environment files
+.env.test
+.env.test.local
+.env.testing
+
+# Playwright (if used)
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Cypress (if used)
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Storybook (if used)
+storybook-static/
+
+# Build artifacts
+build/
+out/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
