@@ -1,10 +1,11 @@
 import { useGameProvider } from "../hooks/useGameProvider"
-import { Stage } from "@pixi/react"
-import RoomSprite from "./RoomSprite"
-import Interactable from "./Interactable"
-import DeathRoom from "./DeathRoom"
-import { GAME_CONSTANTS } from "../constants/game"
+import GameStage from "./viewport/GameStage"
+import RoomRenderer from "./viewport/RoomRenderer"
+import InteractableList from "./viewport/InteractableList"
 
+/**
+ * Main Viewport component that manages the game rendering area
+ */
 const Viewport = () => {
   const { currentRoom, currentAction, handleInteraction } = useGameProvider()
 
@@ -15,29 +16,16 @@ const Viewport = () => {
   }
 
   return (
-    <div
-      id="viewport"
-      className={`cursor-${currentAction}`}
+    <GameStage
+      currentAction={currentAction}
+      onPointerDown={handlePointerDown}
     >
-      <Stage
-        width={GAME_CONSTANTS.VIEWPORT_SIZE}
-        height={GAME_CONSTANTS.VIEWPORT_SIZE}
-        onPointerDown={handlePointerDown}
-      >
-        {currentRoom?.isDeath ? (
-          <DeathRoom currentRoom={currentRoom} />
-        ) : (
-          <RoomSprite currentRoom={currentRoom} />
-        )}
-        {currentRoom?.interactables?.map((interactable) => (
-          <Interactable
-            key={interactable.name}
-            interactable={interactable}
-            handler={handleInteraction}
-          />
-        ))}
-      </Stage>
-    </div>
+      <RoomRenderer currentRoom={currentRoom} />
+      <InteractableList
+        interactables={currentRoom?.interactables}
+        onInteraction={handleInteraction}
+      />
+    </GameStage>
   )
 }
 

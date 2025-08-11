@@ -1,7 +1,12 @@
 import { ReactTyped } from "react-typed"
 import { useGameProvider } from "../hooks/useGameProvider"
+
+/**
+ * Component that displays room descriptions with typing animation
+ */
 const Description = () => {
   const { currentRoom, currentDescription } = useGameProvider()
+  
   return (
     <div id="description">
       <h1>{currentRoom.name}</h1>
